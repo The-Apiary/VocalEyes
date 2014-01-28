@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VocalEyes</title>
+  <script src="jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // vars
+      var alpha = ['a','e','i','o','u','!','<']
+      var aGroup = ['a', 'b','c','d']
+      var eGroup = ['e','f','g','h']
+      var iGroup = ['i','j','k','l','m','n']
+      var oGroup = ['o','p','q','r','s','t']
+      var uGroup = ['u','v','w','x','y','z']
+      var pGroup = ['space','backspace','.',',','!']
+      var sGroup = ['say','send']
+      var groups = {
+        "a":aGroup,
+        "e":eGroup,
+        "i":iGroup,
+        "o":oGroup,
+        "u":uGroup,
+        "!":pGroup,
+        "<":sGroup
+      }
+      var currGroup = alpha
+
+      // main loop
+      setInterval(function() {
+        
+      }, 1000);   
+
+      var inputEvent = function() {
+        console.log("Input detected ...")
+      };
+
+      // listeners
+      $('body').keypress(function(e) {
+        if(e.which == 32) { // space
+          inputEvent();
+        }
+      });
+
+    });
+  </script>
+</head>
+<body>
+
+<h1>VocalEyes</h1>
+
+<h3>Interface 1.0</h3>
+<table id="interface-1.0">
+  <tr id="row1"></tr>
+  <tr id="row2"></tr>
+</table>
+
+<h3>Sentence Builder:</h3>
+<p id="sentence-builder"></p>
+
+<h3>Sentence Log:</h3>
+<table id="sentence-log"></table>
+
+</body>
+</html>
