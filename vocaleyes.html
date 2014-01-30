@@ -6,32 +6,130 @@
   <script>
     $(document).ready(function() {
       // vars
-      var alpha = ['a','e','i','o','u','!','<']
-      var aGroup = ['a', 'b','c','d']
-      var eGroup = ['e','f','g','h']
-      var iGroup = ['i','j','k','l','m','n']
-      var oGroup = ['o','p','q','r','s','t']
-      var uGroup = ['u','v','w','x','y','z']
-      var pGroup = ['space','backspace','.',',','!']
-      var sGroup = ['say','send']
-      var groups = {
-        "a":aGroup,
-        "e":eGroup,
-        "i":iGroup,
-        "o":oGroup,
-        "u":uGroup,
-        "!":pGroup,
-        "<":sGroup
-      }
-      var currGroup = alpha
 
-      // main loop
-      setInterval(function() {
-        
-      }, 1000);   
+      var wordBuilder = "";
+      var sentenceBuilder = "";
+      var sentenceLog = [];
+
+      var appendWordToSentenceBuilder = function() {
+        sentenceBuilder += wordBuilder + " ";
+        wordBuilder = "";
+      }
+
+      var appendPunctToSentenceBuilder = function(punct) {
+          // change to eliminate all trailing whitespace
+      }
+
+      var alpha;
+
+      var aNode = {
+        'values':['a','b','c','d','back'],
+        'a':'a',
+        'b':'b',
+        'c':'c',
+        'd':'d',
+        'back':alpha
+      }
+
+      var eNode = {
+        'values':['e','f','g','h','back'],
+        'e':'e',
+        'f':'f',
+        'g':'g',
+        'h':'h',
+        'back':alpha
+      }
+
+      var iNode = {
+        'values':['i','j','k','l','m','n','back'],
+        'i':'i',
+        'j':'j',
+        'k':'k',
+        'l':'l',
+        'm':'m',
+        'n':'n',
+        'back':alpha
+      }
+
+      var oNode = {
+        'values':['o','p','q','r','s','t','back'],
+        'o':'o',
+        'p':'p',
+        'q':'q',
+        'r':'r',
+        's':'s',
+        't':'t',
+        'back':alpha
+      }
+
+      var uNode = {
+        'values':['u','v','w','x','y','z','back'],
+        'u':'u',
+        'v':'v',
+        'w':'w',
+        'x':'x',
+        'y':'y',
+        'z':'z',
+        'back':alpha
+      }
+
+      var punctNode = {
+        'values':['.',',','?','!','back'],
+        '.':'.',
+        ',':',',
+        '?':'?',
+        '!':'!',
+        'back':alpha
+      }
+
+      var functNode = {
+        'values':['say','send','back'],
+        'say':false,
+        'send':false,
+        'back':alpha
+      }
+
+      alpha = {
+        'values':['a','e','i','o','u','_','!','<'],
+        'a':aNode,
+        'e':eNode,
+        'i':iNode,
+        'o':oNode,
+        'u':uNode,
+        '_':appendWordToSentenceBuilder,
+        '!':punctNode,
+        '<':functNode,
+      }
+
+      var currNode = alpha;
+      var valueCounter = 0;
 
       var inputEvent = function() {
-        console.log("Input detected ...")
+        console.log("input detected!");
+        var currValue = currNode["values"][valueCounter];
+        var valueSelected = currNode[currValue];
+        switch(typeof valueSelected)
+        {
+          case "string":
+            wordBuilder += valueSelected;
+            currNode = alpha;
+            console.log(wordBuilder);
+            break;
+
+          case "object":
+            currNode = valueSelected;
+            console.log(valueSelected)
+            break;
+
+          case "function":
+            valueSelected();
+            break;
+
+          default:
+            console.log("something went terribly wrong!");
+        }
+        
+        valueCounter = 0;
       };
 
       // listeners
@@ -41,6 +139,11 @@
         }
       });
 
+      setInterval(function() {
+        valueCounter = (valueCounter + 1) % currNode["values"].length;
+        console.log(currNode["values"]);
+        console.log(valueCounter);
+      }, 1000);   
     });
   </script>
 </head>
