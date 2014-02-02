@@ -172,10 +172,21 @@ $(document).ready(function() {
   var updateInterface = function() {
     // update decisions interface
     var userInterfaceContents = "";
+    var userInterfaceNext = "";
     for (var i = currNode.decisions.length - 1; i >= 0; i--) {
       userInterfaceContents = "<td>" + currNode.decisions[i].key + "</td>" + userInterfaceContents;
+      console.log(currNode.decisions[i].val);
+      if(currNode.decisions[i].val.args.length > 0 && currNode.decisions[i].val.args[0].class == "VECore_DecisionNode") {
+        var nextOptions = "";
+        for (var j = currNode.decisions[i].val.args[0].decisions.length - 1; j >= 0; j--) {
+          nextOptions = "<li>" + currNode.decisions[i].val.args[0].decisions[j].key + "</li>" + nextOptions;
+        };
+        userInterfaceNext = "<td>" + nextOptions + "</td>" + userInterfaceNext;
+      } else {
+        userInterfaceNext = "<td></td>" + userInterfaceNext;
+      };
     };
-    $("#interface").html("<tr>" + userInterfaceContents + "</tr>");
+    $("#interface").html("<tr>" + userInterfaceContents + "</tr><tr>" + userInterfaceNext + "</tr>");
     $("#interface tr:first td:nth-child(" + (valueCounter + 1) + ")").css({"font-size": "40px", "background": "green", "color": "white", "text-shadow": "0px 0px 0px #000"});
     // update word builder
     $("#word-builder").html(wordBuilder);
