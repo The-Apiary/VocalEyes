@@ -22,6 +22,14 @@
           // change to eliminate all trailing whitespace
       }
 
+      var VE_ClearWordBuilder = function() {
+        wordBuilder = "";
+      }
+
+      var VE_ClearSentenceBuilder = function() {
+        sentenceBuilder = "";
+      }
+
       var VE_RandomText = function(length) {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -116,6 +124,8 @@
 
       var functNode = new VE_DecisionNode([
         new VE_KeyValPair('say', VE_TTSSentenceBuilder),
+        new VE_KeyValPair('clear WB', VE_ClearWordBuilder),
+        new VE_KeyValPair('clear SB', VE_ClearSentenceBuilder),
         new VE_KeyValPair('back',alpha)
       ]);
 
@@ -204,31 +214,40 @@
 </head>
 <body>
 <div class="container">
-  <h1>VocalEyes</h1>
+  <div class="header">
+    <h1>VocalEyes</h1>
+    <hr>
+  </div>
 
-  <hr>
-  <h3>Interface 0.2</h3>
-  <ol>
-    <li>Use the spacebar to select a group of characters.</li>
-    <li>Select _ to add the word in the Word Builder to the Sentence Builder.</li>
-    <li>The Sentence Builder inserts spaces between words.</li>
-  </ol>
-  <table id="interface">
-  </table>
+  <div class="interface">
+    <h3>Interface</h3>
+    <ol>
+      <li>Use the spacebar to select a group of characters.</li>
+      <li>Within a group of characters, select one to add it to the Word Builder.</li>
+      <li>Select _ to add the word in the Word Builder to the Sentence Builder.</li>
+      <li>The Sentence Builder inserts spaces between words.</li>
+    </ol>
+    <table id="interface"></table>
+  </div>
 
-  <hr>
-  <h3>Word Builder</h3> 
-  <p id="word-builder"></p>
+  <div class="word-builder">
+    <h3>Word Builder</h3> 
+    <p id="word-builder"></p>
+  </div>
 
-  <hr>
-  <h3>Sentence Builder</h3>
-  <p id="sentence-builder"></p>
+  <div class="sentence-builder">
+    <h3>Sentence Builder</h3>
+    <p id="sentence-builder"></p>
+  </div>
 
-  <hr>
-  <h3>Sentence Log</h3>
-  <table id="sentence-log"></table>
+  <div class="sentence-log">
+    <h3>Sentence Log</h3>
+    <table id="sentence-log"></table>
+  </div>
 
-  <footer><small>an apiarygroup project</small></footer>
+  <footer>
+    <small>ver. 0.2.0<br>>> an apiarygroup project <<</small>
+  </footer>
 </div>
 
 </body>
