@@ -171,6 +171,9 @@
       };
 
       // listeners
+      $('#ve-main').click(function(e) {
+        inputEvent();
+      });
       $('body').keypress(function(e) {
         if(e.which == 32) { // space
           inputEvent();
@@ -206,7 +209,7 @@
   </script>
 </head>
 <body>
-<div class="container">
+<div id="ve-main" class="container">
   <div class="header">
     <h1>VocalEyes</h1>
     <hr>
