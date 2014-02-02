@@ -7,8 +7,7 @@
   <script>
     $(document).ready(function() {
       // Utility Functions, etc.
-      var VEUtil_RandomChars = function(length) {
-        var text = "";
+      var VEUtil_RandomChars = function(length) {        var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         for(var i = 0; i < length; i++)
           text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -76,6 +75,14 @@
         VEUtil_GoogleTTS(sentenceBuilder);
       }
 
+      var clearWordBuilder = function() {
+        wordBuilder = "";
+      }
+
+      var clearSentenceBuilder = function() {
+        sentenceBuilder = "";
+      }
+
       var alpha = new VECore_DecisionNode([]); // alpha is an empty Decision
 
       var aNode = new VECore_DecisionNode([
@@ -134,6 +141,8 @@
 
       var functNode = new VECore_DecisionNode([
         new VECore_KeyValPair('say', new VECore_ActionNode(saySentenceBuilder, [])),
+        new VECore_KeyValPair('clear WB', new VECore_ActionNode(clearWordBuilder, [])),
+        new VECore_KeyValPair('clear SB', new VECore_ActionNode(clearSentenceBuilder, [])),
         new VECore_KeyValPair('back', new VECore_ActionNode(setActiveDecision, [alpha]))
       ]);
 
@@ -198,31 +207,40 @@
 </head>
 <body>
 <div class="container">
-  <h1>VocalEyes</h1>
+  <div class="header">
+    <h1>VocalEyes</h1>
+    <hr>
+  </div>
 
-  <hr>
-  <h3>Interface 0.2</h3>
-  <ol>
-    <li>Use the spacebar to select a group of characters.</li>
-    <li>Select _ to add the word in the Word Builder to the Sentence Builder.</li>
-    <li>The Sentence Builder inserts spaces between words.</li>
-  </ol>
-  <table id="interface">
-  </table>
+  <div class="interface">
+    <h3>Interface</h3>
+    <ol>
+      <li>Use the spacebar to select a group of characters.</li>
+      <li>Within a group of characters, select one to add it to the Word Builder.</li>
+      <li>Select _ to add the word in the Word Builder to the Sentence Builder.</li>
+      <li>The Sentence Builder inserts spaces between words.</li>
+    </ol>
+    <table id="interface"></table>
+  </div>
 
-  <hr>
-  <h3>Word Builder</h3> 
-  <p id="word-builder"></p>
+  <div class="word-builder">
+    <h3>Word Builder</h3> 
+    <p id="word-builder"></p>
+  </div>
 
-  <hr>
-  <h3>Sentence Builder</h3>
-  <p id="sentence-builder"></p>
+  <div class="sentence-builder">
+    <h3>Sentence Builder</h3>
+    <p id="sentence-builder"></p>
+  </div>
 
-  <hr>
-  <h3>Sentence Log</h3>
-  <table id="sentence-log"></table>
+  <div class="sentence-log">
+    <h3>Sentence Log</h3>
+    <table id="sentence-log"></table>
+  </div>
 
-  <footer><small>an apiarygroup project</small></footer>
+  <footer>
+    <small>ver. 0.2.0<br>>> an apiarygroup project <<</small>
+  </footer>
 </div>
 
 </body>
