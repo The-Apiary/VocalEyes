@@ -130,6 +130,7 @@
         }
         
         valueCounter = 0;
+        updateInterface();
       };
 
       // listeners
@@ -139,24 +140,25 @@
         }
       });
 
-      setInterval(function() {
-        valueCounter = (valueCounter + 1) % currNode["values"].length;
-
-        // update interface
+      var updateInterface = function() {
         var userInterfaceContents = "";
         for (var i = currNode["values"].length - 1; i >= 0; i--) {
-//          userInterfaceContents = "<li>" + currNode["values"][i] + "</li>" + userInterfaceContents;
         userInterfaceContents = "<td>" + currNode["values"][i] + "</td>" + userInterfaceContents;
         };
         $("#interface").html("<tr>" + userInterfaceContents + "</tr>");
         $("#interface tr:first td:nth-child(" + (valueCounter + 1) + ")").css({"font-size": "40px", "background": "green", "color": "white", "text-shadow": "0px 0px 0px #000"});
-//        $("#interface li:nth-child(" + (valueCounter + 1) + ")").css("font-size","50px")
 
         // update word builder
         $("#word-builder").html(wordBuilder);
 
         // update sentence builder
         $("#sentence-builder").html(sentenceBuilder);
+      };
+
+      setInterval(function() {
+        valueCounter = (valueCounter + 1) % currNode["values"].length;
+
+        updateInterface();
 
         console.log(currNode["values"]);
         console.log(valueCounter);
@@ -169,10 +171,14 @@
   <h1>VocalEyes</h1>
 
   <hr>
-  <h3>Interface 0.1</h3>
+  <h3>Interface 0.2</h3>
+  <ol>
+    <li>Use the spacebar to select a group of characters.</li>
+    <li>Select _ to add the word in the Word Builder to the Sentence Builder.</li>
+    <li>The Sentence Builder inserts spaces between words.</li>
+  </ol>
   <table id="interface">
   </table>
-<!--  <ul id="interface"></ul> -->
 
   <hr>
   <h3>Word Builder</h3> 
@@ -185,6 +191,9 @@
   <hr>
   <h3>Sentence Log</h3>
   <table id="sentence-log"></table>
+
+  <footer><small>an apiarygroup project</small></footer>
 </div>
+
 </body>
 </html>
