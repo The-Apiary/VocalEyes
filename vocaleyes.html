@@ -48,6 +48,7 @@
       var wordBuilder = "";
       var sentenceBuilder = "";
       var sentenceLog = [];
+      var updateInterval = 400;
 
       var appendCharToWB = function(char, node) {
         wordBuilder += char;
@@ -81,6 +82,11 @@
 
       var clearSentenceBuilder = function() {
         sentenceBuilder = "";
+      }
+
+      var setUpdateInterval = function(int, node) {
+        updateInterval = int;
+        currNode = node;
       }
 
       var alpha = new VECore_DecisionNode([]); // alpha is an empty Decision
@@ -139,10 +145,19 @@
         new VECore_KeyValPair('back', new VECore_ActionNode(setActiveDecision, [alpha]))
       ]);
 
+      var speedNode = new VECore_DecisionNode([]);
+      speedNode.decisions.push(new VECore_KeyValPair('V fast', new VECore_ActionNode(setUpdateInterval, [200, speedNode])));
+      speedNode.decisions.push(new VECore_KeyValPair('fast', new VECore_ActionNode(setUpdateInterval, [300, speedNode])));
+      speedNode.decisions.push(new VECore_KeyValPair('moderate', new VECore_ActionNode(setUpdateInterval, [400, speedNode])));
+      speedNode.decisions.push(new VECore_KeyValPair('slow', new VECore_ActionNode(setUpdateInterval, [800, speedNode])));
+      speedNode.decisions.push(new VECore_KeyValPair('V slow', new VECore_ActionNode(setUpdateInterval, [1600, speedNode])));
+      speedNode.decisions.push(new VECore_KeyValPair('back', new VECore_ActionNode(setActiveDecision, [alpha])));
+      
       var functNode = new VECore_DecisionNode([
         new VECore_KeyValPair('say', new VECore_ActionNode(saySentenceBuilder, [])),
         new VECore_KeyValPair('clear WB', new VECore_ActionNode(clearWordBuilder, [])),
         new VECore_KeyValPair('clear SB', new VECore_ActionNode(clearSentenceBuilder, [])),
+        new VECore_KeyValPair('change speed', new VECore_ActionNode(setActiveDecision, [speedNode])),
         new VECore_KeyValPair('back', new VECore_ActionNode(setActiveDecision, [alpha]))
       ]);
 
@@ -177,6 +192,16 @@
         }
       });
 
+      var startTimer = function() {
+        valueCounter = (valueCounter + 1) % currNode.decisions.length;
+
+        console.log(currNode);
+        console.log(valueCounter);
+
+        updateInterface();
+        setTimeout(startTimer, updateInterval);
+      };
+
       var updateInterface = function() {
         // update decisions interface
         var userInterfaceContents = "";
@@ -194,14 +219,15 @@
         $("#sentence-builder").html(sentenceBuilder);
       };
 
-      setInterval(function() {
-        valueCounter = (valueCounter + 1) % currNode.decisions.length;
-
-        console.log(currNode);
-        console.log(valueCounter);
-
-        updateInterface();
-      }, 800);   
+//      setInterval(function() {
+//        valueCounter = (valueCounter + 1) % currNode.decisions.length;
+//
+//        console.log(currNode);
+//        console.log(valueCounter);
+//
+//        updateInterface();
+//      }, updateInterval);   
+      startTimer();
     });
   </script>
 </head>
