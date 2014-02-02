@@ -20,7 +20,7 @@
           // change to eliminate all trailing whitespace
       }
 
-      var alpha;
+      var alpha = {};
 
       var aNode = {
         'values':['a','b','c','d','back'],
@@ -89,17 +89,16 @@
         'back':alpha
       }
 
-      alpha = {
-        'values':['a','e','i','o','u','_','!','<'],
-        'a':aNode,
-        'e':eNode,
-        'i':iNode,
-        'o':oNode,
-        'u':uNode,
-        '_':appendWordToSentenceBuilder,
-        '!':punctNode,
-        '<':functNode,
-      }
+      alpha['values'] = ['a','e','i','o','u','_','!','<'];
+        alpha['a'] = aNode;
+        alpha['e'] = eNode;
+        alpha['i'] = iNode; 
+        alpha['o'] = oNode;
+        alpha['u'] = uNode;
+        alpha['_'] = appendWordToSentenceBuilder;
+        alpha['!'] = punctNode;
+        alpha['<'] = functNode;
+      
 
       var currNode = alpha;
       var valueCounter = 0;
@@ -141,6 +140,21 @@
 
       setInterval(function() {
         valueCounter = (valueCounter + 1) % currNode["values"].length;
+
+        // update interface
+        var userInterfaceContents = "";
+        for (var i = currNode["values"].length - 1; i >= 0; i--) {
+          userInterfaceContents = "<li>" + currNode["values"][i] + "</li>" + userInterfaceContents;
+        };
+        $("#interface").html(userInterfaceContents);
+        $("#interface li:nth-child(" + (valueCounter + 1) + ")").css("background-color","green")
+
+        // update word builder
+        $("#word-builder").html(wordBuilder);
+
+        // update sentence builder
+        $("#sentence-builder").html(sentenceBuilder);
+
         console.log(currNode["values"]);
         console.log(valueCounter);
       }, 1000);   
@@ -152,10 +166,10 @@
 <h1>VocalEyes</h1>
 
 <h3>Interface 1.0</h3>
-<table id="interface-1.0">
-  <tr id="row1"></tr>
-  <tr id="row2"></tr>
-</table>
+<ul id="interface"></ul>
+
+<h3>Word Builder:</h3> 
+<p id="word-builder"></p>
 
 <h3>Sentence Builder:</h3>
 <p id="sentence-builder"></p>
