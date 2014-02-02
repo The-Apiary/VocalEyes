@@ -142,7 +142,7 @@ $(document).ready(function() {
   alpha.decisions.push(new VECore_KeyValPair('<', new VECore_ActionNode(setActiveDecision, [functNode])));
   
   var currNode = alpha;
-  var valueCounter = 0;
+  var valueCounter = -1; // start decision cycle at the first option
   var inputEvent = function() {
     console.log("input detected!");
     var selectedDecision = currNode.decisions[valueCounter];
