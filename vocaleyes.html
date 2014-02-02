@@ -11,6 +11,7 @@
       var sentenceBuilder = "";
       var sentenceLog = [];
 
+      // VocalEyes Functions
       var appendWordToSentenceBuilder = function() {
         sentenceBuilder += wordBuilder + " ";
         wordBuilder = "";
@@ -20,108 +21,141 @@
           // change to eliminate all trailing whitespace
       }
 
-      var alpha = {};
+      var VE_RandomText = function(length) {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for(var i = 0; i < length; i++)
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-      var aNode = {
-        'values':['a','b','c','d','back'],
-        'a':'a',
-        'b':'b',
-        'c':'c',
-        'd':'d',
-        'back':alpha
+        return text;
       }
 
-      var eNode = {
-        'values':['e','f','g','h','back'],
-        'e':'e',
-        'f':'f',
-        'g':'g',
-        'h':'h',
-        'back':alpha
+      var VE_TTSSentenceBuilder = function() {
+        var url = "http://www.translate.google.com/translate_tts?tl=en&q=" + sentenceBuilder;
+        var id = "audio-" + VE_RandomText(5);
+        $("body").append("<audio autoplay id='" + id + "'><source src='" + url + "' type='audio/mpeg'></audio>");
+        $("#" + id).on('ended', function() {
+          $("#" + id).remove();
+        });
       }
 
-      var iNode = {
-        'values':['i','j','k','l','m','n','back'],
-        'i':'i',
-        'j':'j',
-        'k':'k',
-        'l':'l',
-        'm':'m',
-        'n':'n',
-        'back':alpha
+      // VocalEyes Classes
+      var VE_KeyValPair = function(key, val) {
+        this.class = "VE_KeyValPair";
+        this.key = key;
+        this.val = val;
       }
 
-      var oNode = {
-        'values':['o','p','q','r','s','t','back'],
-        'o':'o',
-        'p':'p',
-        'q':'q',
-        'r':'r',
-        's':'s',
-        't':'t',
-        'back':alpha
+      var VE_DecisionNode = function(kvPairs) {
+        this.class = "VE_DecisionNode";
+        this.decisions = kvPairs;
       }
 
-      var uNode = {
-        'values':['u','v','w','x','y','z','back'],
-        'u':'u',
-        'v':'v',
-        'w':'w',
-        'x':'x',
-        'y':'y',
-        'z':'z',
-        'back':alpha
+      var VE_Punctuation = function(char, endSentence) {
+        this.class = "VE_Punctuation";
+        this.char = char;
+        this.endSentence = endSentence;
       }
 
-      var punctNode = {
-        'values':['.',',','?','!','back'],
-        '.':'.',
-        ',':',',
-        '?':'?',
-        '!':'!',
-        'back':alpha
-      }
+      var alpha = new VE_DecisionNode([]); // alpha is an empty Decision
 
-      var functNode = {
-        'values':['say','send','back'],
-        'say':false,
-        'send':false,
-        'back':alpha
-      }
+      var aNode = new VE_DecisionNode([
+        new VE_KeyValPair('a','a'),
+        new VE_KeyValPair('b','b'),
+        new VE_KeyValPair('c','c'),
+        new VE_KeyValPair('d','d'),
+        new VE_KeyValPair('back',alpha)
+      ]);
 
-      alpha['values'] = ['a','e','i','o','u','_','!','<'];
-        alpha['a'] = aNode;
-        alpha['e'] = eNode;
-        alpha['i'] = iNode; 
-        alpha['o'] = oNode;
-        alpha['u'] = uNode;
-        alpha['_'] = appendWordToSentenceBuilder;
-        alpha['!'] = punctNode;
-        alpha['<'] = functNode;
+      var eNode = new VE_DecisionNode([
+        new VE_KeyValPair('e','e'),
+        new VE_KeyValPair('f','f'),
+        new VE_KeyValPair('g','g'),
+        new VE_KeyValPair('h','h'),
+        new VE_KeyValPair('back',alpha)
+      ]);
+
+      var iNode = new VE_DecisionNode([
+        new VE_KeyValPair('i','i'),
+        new VE_KeyValPair('j','j'),
+        new VE_KeyValPair('k','k'),
+        new VE_KeyValPair('l','l'),
+        new VE_KeyValPair('m','m'),
+        new VE_KeyValPair('n','n'),
+        new VE_KeyValPair('back',alpha)
+      ]);
+
+      var oNode = new VE_DecisionNode([
+        new VE_KeyValPair('o','o'),
+        new VE_KeyValPair('p','p'),
+        new VE_KeyValPair('q','q'),
+        new VE_KeyValPair('r','r'),
+        new VE_KeyValPair('s','s'),
+        new VE_KeyValPair('t','t'),
+        new VE_KeyValPair('back',alpha)
+      ]);
+
+      var uNode = new VE_DecisionNode([
+        new VE_KeyValPair('u','u'),
+        new VE_KeyValPair('v','v'),
+        new VE_KeyValPair('w','w'),
+        new VE_KeyValPair('x','x'),
+        new VE_KeyValPair('y','y'),
+        new VE_KeyValPair('z','z'),
+        new VE_KeyValPair('back',alpha)
+      ]);
+
+      var punctNode = new VE_DecisionNode([
+        new VE_KeyValPair('.', new VE_Punctuation('.', true)),
+        new VE_KeyValPair(',', new VE_Punctuation(',', false)),
+        new VE_KeyValPair('?', new VE_Punctuation('?', true)),
+        new VE_KeyValPair('!', new VE_Punctuation('!', true)),
+        new VE_KeyValPair('back',alpha)
+      ]);
+
+      var functNode = new VE_DecisionNode([
+        new VE_KeyValPair('say', VE_TTSSentenceBuilder),
+        new VE_KeyValPair('back',alpha)
+      ]);
+
+      alpha.decisions.push(new VE_KeyValPair('a',aNode));
+      alpha.decisions.push(new VE_KeyValPair('e',eNode));
+      alpha.decisions.push(new VE_KeyValPair('i',iNode));
+      alpha.decisions.push(new VE_KeyValPair('o',oNode));
+      alpha.decisions.push(new VE_KeyValPair('u',uNode));
+      alpha.decisions.push(new VE_KeyValPair('_',appendWordToSentenceBuilder));
+      alpha.decisions.push(new VE_KeyValPair('!',punctNode));
+      alpha.decisions.push(new VE_KeyValPair('<',functNode));
       
-
       var currNode = alpha;
       var valueCounter = 0;
 
       var inputEvent = function() {
         console.log("input detected!");
-        var currValue = currNode["values"][valueCounter];
-        var valueSelected = currNode[currValue];
-        switch(typeof valueSelected)
-        {
+        var selectedDecision = currNode.decisions[valueCounter];
+        var selectedValue = selectedDecision.val;
+        switch(typeof selectedValue) {
           case "string":
-            wordBuilder += valueSelected;
+            wordBuilder += selectedValue;
             currNode = alpha;
             console.log(wordBuilder);
             break;
 
           case "object":
-            currNode = valueSelected;
-            console.log(valueSelected)
+            switch(selectedValue.class) {
+              case "VE_DecisionNode":
+                currNode = selectedValue;
+                console.log(selectedValue);
+                break;
+              case "VE_Punctuation":
+                console.log("punctuation ALMOST happened ...");
+              default:
+                console.log("Somebody is feeling pretty damn lazy.");
+            }
             break;
 
           case "function":
-            valueSelected();
+            selectedValue();
             break;
 
           default:
@@ -139,13 +173,17 @@
       });
 
       setInterval(function() {
-        valueCounter = (valueCounter + 1) % currNode["values"].length;
+        valueCounter = (valueCounter + 1) % currNode.decisions.length;
+
+        console.log(currNode);
+        console.log(valueCounter);
 
         // update interface
         var userInterfaceContents = "";
-        for (var i = currNode["values"].length - 1; i >= 0; i--) {
-          userInterfaceContents = "<li>" + currNode["values"][i] + "</li>" + userInterfaceContents;
+        for (var i = currNode.decisions.length - 1; i >= 0; i--) {
+          userInterfaceContents = "<li>" + currNode.decisions[i].key + "</li>" + userInterfaceContents;
         };
+
         $("#interface").html(userInterfaceContents);
         $("#interface li:nth-child(" + (valueCounter + 1) + ")").css("background-color","green")
 
@@ -154,9 +192,6 @@
 
         // update sentence builder
         $("#sentence-builder").html(sentenceBuilder);
-
-        console.log(currNode["values"]);
-        console.log(valueCounter);
       }, 1000);   
     });
   </script>
