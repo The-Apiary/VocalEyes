@@ -181,7 +181,7 @@ $(document).ready(function() {
         for (var j = currNode.decisions[i].val.args[0].decisions.length - 1; j >= 0; j--) {
           nextOptions = "<li>" + currNode.decisions[i].val.args[0].decisions[j].key + "</li>" + nextOptions;
         };
-        userInterfaceNext = "<td>" + nextOptions + "</td>" + userInterfaceNext;
+        userInterfaceNext = "<td><ul>" + nextOptions + "</ul></td>" + userInterfaceNext;
       } else {
         userInterfaceNext = "<td></td>" + userInterfaceNext;
       };
