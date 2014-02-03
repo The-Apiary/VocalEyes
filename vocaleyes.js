@@ -36,7 +36,7 @@ $(document).ready(function() {
   var wordBuilder = "";
   var sentenceBuilder = "";
   var sentenceLog = [];
-  var updateInterval = 400;
+  var updateInterval = 800;
   var appendCharToWB = function(char, node) {
     wordBuilder += char;
     currNode = node;
@@ -118,11 +118,11 @@ $(document).ready(function() {
     new VECore_KeyValPair('back', new VECore_ActionNode(setActiveDecision, [alpha]))
   ]);
   var speedNode = new VECore_DecisionNode([]);
-  speedNode.decisions.push(new VECore_KeyValPair('V fast', new VECore_ActionNode(setUpdateInterval, [200, speedNode])));
-  speedNode.decisions.push(new VECore_KeyValPair('fast', new VECore_ActionNode(setUpdateInterval, [300, speedNode])));
-  speedNode.decisions.push(new VECore_KeyValPair('moderate', new VECore_ActionNode(setUpdateInterval, [400, speedNode])));
-  speedNode.decisions.push(new VECore_KeyValPair('slow', new VECore_ActionNode(setUpdateInterval, [800, speedNode])));
-  speedNode.decisions.push(new VECore_KeyValPair('V slow', new VECore_ActionNode(setUpdateInterval, [1600, speedNode])));
+  speedNode.decisions.push(new VECore_KeyValPair('V fast', new VECore_ActionNode(setUpdateInterval, [400, speedNode])));
+  speedNode.decisions.push(new VECore_KeyValPair('fast', new VECore_ActionNode(setUpdateInterval, [600, speedNode])));
+  speedNode.decisions.push(new VECore_KeyValPair('moderate', new VECore_ActionNode(setUpdateInterval, [800, speedNode])));
+  speedNode.decisions.push(new VECore_KeyValPair('slow', new VECore_ActionNode(setUpdateInterval, [1000, speedNode])));
+  speedNode.decisions.push(new VECore_KeyValPair('V slow', new VECore_ActionNode(setUpdateInterval, [1200, speedNode])));
   speedNode.decisions.push(new VECore_KeyValPair('back', new VECore_ActionNode(setActiveDecision, [alpha])));
   
   var functNode = new VECore_DecisionNode([
@@ -138,7 +138,7 @@ $(document).ready(function() {
   alpha.decisions.push(new VECore_KeyValPair('o', new VECore_ActionNode(setActiveDecision, [oNode])));
   alpha.decisions.push(new VECore_KeyValPair('u', new VECore_ActionNode(setActiveDecision, [uNode])));
   alpha.decisions.push(new VECore_KeyValPair('_', new VECore_ActionNode(pushWBToSB, [])));
-  alpha.decisions.push(new VECore_KeyValPair('!', new VECore_ActionNode(setActiveDecision, [punctNode])));
+//  alpha.decisions.push(new VECore_KeyValPair('!', new VECore_ActionNode(setActiveDecision, [punctNode])));
   alpha.decisions.push(new VECore_KeyValPair('<', new VECore_ActionNode(setActiveDecision, [functNode])));
   
   var currNode = alpha;
