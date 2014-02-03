@@ -6,13 +6,20 @@ $(document).ready(function() {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
   }
-  var VEUtil_GoogleTTS = function(say) {
-    var url = "http://www.translate.google.com/translate_tts?tl=en&q=" + say;
+  var VEUtil_GoogleTTS = function(string) {
+    var text = string.trim().replace(" ","+");
+    var language = "en";
+    var url = "http://www.translate.google.com/translate_tts?tl=" + language + "&q=" + text;
     var id = "audio-" + VEUtil_RandomChars(5);
     $("body").append("<audio autoplay id='" + id + "'><source src='" + url + "' type='audio/mpeg'></audio>");
+
+    $("#" + id).on('error', function(e) {
+      console.log(e);
+      $("#" + id).remove();
+    });
     $("#" + id).on('ended', function() {
       $("#" + id).remove();
-    })
+    });
   }
   // VocalEyes Core Logic Variables, Functions, etc.
   var VECore_KeyValPair = function(key, val) {
