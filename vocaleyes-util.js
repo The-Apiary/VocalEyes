@@ -1,4 +1,9 @@
-  // Utility Functions, etc.
+  // file vocaleyes-util.js
+  // oauthor  Nicholas Vitovitch <ngvitovitch@gmail.com>
+  // brief  Utility functions used by the VocalEyes application
+
+  // function VEUtil_RandomChars
+  // brief  returns a string of the specified length containing random chars
   var VEUtil_RandomChars = function(length) {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -7,10 +12,16 @@
     return text;
   }
 
+  // function VEUtil_GoogleTTS
+  // brief  Uses HTML5 audio elements and Google Translate's TTS services to
+  //        speak the given string.
+  // desc   The given string is broken down into bite-sized pieces (at 
+  //        sentences, comma breaks, 100 chars) and played one after the other.
   var VEUtil_GoogleTTS = function(string) {
-    var text = string.trim().replace(/(\'|\")/,"");
+    var text = string.trim().replace(/(\'|\")/,""); // strip ' and "
     var split_text = text.split(/(\.+|\,)/); // split on ',' '.' '...'
 
+    // build up tts queue
     var tts_queue = [];
     for (var i = 0; i < split_text.length; i+=2) {
       remainder = split_text[i];
@@ -29,6 +40,7 @@
       }
     }
 
+    // google interface function
     var tts_shift_say = function() {
       var tts_text = tts_queue.shift();
       if(tts_text == undefined) return;
