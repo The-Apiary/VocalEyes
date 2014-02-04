@@ -45,8 +45,23 @@
       var tts_text = tts_queue.shift();
       if(tts_text == undefined) return;
 
-      var language = "en";
-      var url = "http://www.translate.google.com/translate_tts?tl=" + language + "&q=" + tts_text;
+      var ie = "UTF-8"
+      var tl = "en";
+      var total = 1;
+      var idx = 0;
+      var textlen = tts_text.length
+      var prev = "input"
+      var url = "http://www.translate.google.com/translate_tts"
+        + "?ie=" + ie
+        + "&tl=" + tl
+        + "&q=" + tts_text.trim().replace(' ','+')
+        + "&total=" + total
+        + "&idx=" + idx
+        + "&textlen=" + textlen
+        + "&prev=" + prev;
+
+      console.log(url);
+
       var id = "audio-" + VEUtil_RandomChars(5);
 
       $("body").append("<audio autoplay id='" + id + "'><source src='" + url + "' type='audio/mpeg'></audio>");
