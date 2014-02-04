@@ -1,44 +1,6 @@
-$(document).ready(function() {
-  // Utility Functions, etc.
-  var VEUtil_RandomChars = function(length) {        var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for(var i = 0; i < length; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
-  }
-  var VEUtil_GoogleTTS = function(string) {
-    var text = string.trim().replace(" ","+");
-    var language = "en";
-    var url = "http://www.translate.google.com/translate_tts?tl=" + language + "&q=" + text;
-    var id = "audio-" + VEUtil_RandomChars(5);
-    $("body").append("<audio autoplay id='" + id + "'><source src='" + url + "' type='audio/mpeg'></audio>");
+// Main VocalEyes script
 
-    $("#" + id).on('error', function(e) {
-      console.log(e);
-      $("#" + id).remove();
-    });
-    $("#" + id).on('ended', function() {
-      $("#" + id).remove();
-    });
-  }
-  // VocalEyes Core Logic Variables, Functions, etc.
-  var VECore_KeyValPair = function(key, val) {
-    this.class = "VECore_KeyValPair";
-    this.key = key;
-    this.val = val;
-  }
-  var VECore_DecisionNode = function(kvPairs) {
-    this.class = "VECore_DecisionNode";
-    this.decisions = kvPairs;
-  }
-  var VECore_ActionNode = function(func, args) {
-    this.class = "VECore_ActionNode";
-    this.func = func;
-    this.args = args;
-    this.act = function() {
-      this.func.apply(this, this.args);          
-    }
-  }
+$(document).ready(function() {
   // Application Variables, Functions, etc.
   var wordBuilder = "";
   var sentenceBuilder = "";
@@ -171,8 +133,6 @@ $(document).ready(function() {
   });
   var startTimer = function() {
     valueCounter = (valueCounter + 1) % currNode.decisions.length;
-    console.log(currNode);
-    console.log(valueCounter);
     updateInterface();
     setTimeout(startTimer, updateInterval);
   };
@@ -182,7 +142,6 @@ $(document).ready(function() {
     var userInterfaceNext = "";
     for (var i = currNode.decisions.length - 1; i >= 0; i--) {
       userInterfaceContents = "<td>" + currNode.decisions[i].key + "</td>" + userInterfaceContents;
-      console.log(currNode.decisions[i].val);
       if(currNode.decisions[i].val.args.length > 0 && currNode.decisions[i].val.args[0].class == "VECore_DecisionNode") {
         var nextOptions = "";
         for (var j = currNode.decisions[i].val.args[0].decisions.length - 1; j >= 0; j--) {
