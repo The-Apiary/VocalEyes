@@ -24,4 +24,4 @@ or [apache](http://httpd.apache.org) as a server.
 2. Please consult the wiki and/or the issue tracker for active tasks!
 
 
-This work is a product of (The Apiary Group)[http://theapiarygroup.com]
+This work is a product of [The Apiary Group](http://theapiarygroup.com)
